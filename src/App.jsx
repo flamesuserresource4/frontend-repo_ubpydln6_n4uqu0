@@ -1,120 +1,51 @@
-import React, { useState } from 'react';
-import AuthHeader from './components/AuthHeader';
-import InputField from './components/InputField';
-import SocialLogin from './components/SocialLogin';
-import FormFooter from './components/FormFooter';
+import React from 'react';
+import Spline from '@splinetool/react-spline';
+import MusicHeader from './components/MusicHeader';
+import LoginForm from './components/LoginForm';
+import AudioVisualizer from './components/AudioVisualizer';
+import AmbientNotes from './components/AmbientNotes';
 
 function App() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [remember, setRemember] = useState(true);
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState(null);
-
-  const validate = () => {
-    if (!email || !password) return 'لطفاً همه فیلدها را تکمیل کنید.';
-    const emailOk = /\S+@\S+\.\S+/.test(email);
-    if (!emailOk) return 'ایمیل معتبر وارد کنید.';
-    if (password.length < 6) return 'رمز عبور باید حداقل ۶ کاراکتر باشد.';
-    return null;
-  };
-
-  const handleSubmit = async (e) => {
-    e?.preventDefault?.();
-    setMessage(null);
-    const err = validate();
-    if (err) {
-      setMessage({ type: 'error', text: err });
-      return;
-    }
-    try {
-      setLoading(true);
-      await new Promise((r) => setTimeout(r, 900));
-      setMessage({ type: 'success', text: 'با موفقیت وارد شدید! 🎉' });
-    } catch (error) {
-      setMessage({ type: 'error', text: 'خطا در ورود. دوباره تلاش کنید.' });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleProvider = (provider) => {
-    setMessage({ type: 'info', text: `ورود با ${provider} هنوز متصل نشده است.` });
-  };
-
   return (
-    <div dir="rtl" className="min-h-screen bg-gradient-to-br from-blue-50 via-sky-50 to-indigo-50 flex items-center justify-center p-4">
-      <div className="w-full max-w-md">
-        <div className="bg-white/80 backdrop-blur rounded-2xl shadow-xl border border-gray-100 p-6 md:p-8">
-          <AuthHeader title="ورود به حساب کاربری" subtitle="خوش آمدید! لطفاً اطلاعات خود را وارد کنید." />
+    <div dir="rtl" className="relative min-h-screen w-full overflow-hidden bg-neutral-950 text-white">
+      {/* 3D animated dark cover background */}
+      <div className="absolute inset-0">
+        <Spline
+          scene="https://prod.spline.design/vc19ejtcC5VJjy5v/scene.splinecode"
+          style={{ width: '100%', height: '100%' }}
+        />
+        {/* Subtle vignette and top gradient for readability (non-blocking) */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/40 via-black/30 to-black/60" />
+        <div className="pointer-events-none absolute inset-0 [mask-image:radial-gradient(ellipse_at_center,white,transparent_70%)]" />
+      </div>
 
-          {message ? (
-            <div
-              className={`mt-4 rounded-lg px-4 py-2 text-sm border ${
-                message.type === 'success'
-                  ? 'bg-green-50 text-green-800 border-green-200'
-                  : message.type === 'error'
-                  ? 'bg-red-50 text-red-800 border-red-200'
-                  : 'bg-amber-50 text-amber-800 border-amber-200'
-              }`}
-            >
-              {message.text}
-            </div>
-          ) : null}
+      {/* Content */}
+      <div className="relative z-10 flex items-center justify-center min-h-screen px-4 py-10">
+        {/* Music aura around the card */}
+        <div className="absolute -z-0 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[34rem] h-[34rem] rounded-full opacity-60 blur-3xl bg-[conic-gradient(at_50%_50%,#f472b6_0deg,#a78bfa_120deg,#60a5fa_240deg,#f472b6_360deg)] animate-pulse" aria-hidden />
 
-          <form className="mt-6 space-y-4" onSubmit={handleSubmit}>
-            <InputField
-              label="ایمیل"
-              name="email"
-              type="email"
-              placeholder="you@example.com"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="email"
-            />
-            <InputField
-              label="رمز عبور"
-              name="password"
-              type="password"
-              placeholder="••••••••"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              autoComplete="current-password"
-            />
+        {/* Card */}
+        <div className="relative w-full max-w-md">
+          {/* Animated ring border (music vibe) */}
+          <div className="pointer-events-none absolute -inset-[2px] rounded-2xl bg-[conic-gradient(from_180deg_at_50%_50%,#f472b680,#a78bfab3,#60a5fa80,#f472b680)] blur-sm animate-[spin_10s_linear_infinite]" aria-hidden />
 
-            <div className="flex items-center justify-between text-sm select-none">
-              <label className="flex items-center gap-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={remember}
-                  onChange={(e) => setRemember(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                />
-                <span className="text-gray-700">مرا به خاطر بسپار</span>
-              </label>
-              <button type="button" className="text-blue-700 hover:text-blue-800" onClick={() => setMessage({ type: 'info', text: 'لینک بازیابی رمز برای شما ارسال شد (نمونه).' })}>
-                فراموشی رمز؟
-              </button>
-            </div>
+          <div className="relative rounded-2xl border border-white/15 bg-white/10 backdrop-blur-xl shadow-2xl overflow-hidden">
+            <div className="absolute inset-x-0 -top-12 h-24 bg-gradient-to-b from-white/10 to-transparent pointer-events-none" aria-hidden />
+            <div className="p-6 md:p-8">
+              <MusicHeader />
 
-            <FormFooter loading={loading} onSubmit={handleSubmit} onForgot={() => setMessage({ type: 'info', text: 'لطفاً ایمیل خود را بررسی کنید.' })} />
-
-            <div className="relative py-2">
-              <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                <div className="w-full border-t border-gray-200" />
+              {/* Visualizer above the form to give a musical feel */}
+              <div className="mb-6 flex items-center justify-center">
+                <AudioVisualizer />
               </div>
-              <div className="relative flex justify-center">
-                <span className="bg-white px-3 text-xs text-gray-500">یا</span>
-              </div>
-            </div>
 
-            <SocialLogin onProviderClick={handleProvider} />
-          </form>
+              <LoginForm />
+            </div>
+          </div>
         </div>
 
-        <p className="mt-6 text-center text-xs text-gray-500">
-          با ورود شما، شرایط استفاده و سیاست حفظ حریم خصوصی را می‌پذیرید.
-        </p>
+        {/* Floating ambient musical notes */}
+        <AmbientNotes />
       </div>
     </div>
   );
